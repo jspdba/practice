@@ -14,6 +14,6 @@
     <result column="mail" property="mail" jdbcType="VARCHAR" />
     <result column="create_date" property="createDate" jdbcType="TIMESTAMP" />
     <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
-    <result column="avatar" property="avatar" jdbcType="LONGVARCHAR" />
+    <result column="avata" property="avatar" jdbcType="LONGVARCHAR" />
   </resultMap>
 </mapper>
