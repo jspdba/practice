@@ -1,13 +1,18 @@
 package top.wuchaofei.manager.impl;
 
+import com.github.pagehelper.PageHelper;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import tk.mybatis.mapper.entity.Example;
+import top.wuchaofei.domain.Channel;
 import top.wuchaofei.domain.User;
 import top.wuchaofei.manager.UserManager;
 import top.wuchaofei.mapper.UserMapper;
+import top.wuchaofei.service.BaseService;
+import top.wuchaofei.service.impl.BaseServiceImpl;
 import top.wuchaofei.utils.MD5Util;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,32 +26,11 @@ import java.util.Map;
  * Created by wuchaofei  on 2017/3/30.
  */
 @Service
-public class UserManagerImpl implements UserManager {
+public class UserManagerImpl extends BaseServiceImpl<User> implements UserManager {
     @Autowired
     UserMapper userMapper;
 
     protected final Logger logger = LoggerFactory.getLogger(UserManagerImpl.class);
-
-
-    @Override
-    public int deleteByPrimaryKey(Integer id) {
-        return userMapper.deleteByPrimaryKey(id);
-    }
-
-    @Override
-    public int insert(User record) {
-        return userMapper.insert(record);
-    }
-
-    @Override
-    public int insertSelective(User record) {
-        return userMapper.insertSelective(record);
-    }
-
-    @Override
-    public User selectByPrimaryKey(Integer id) {
-        return userMapper.selectByPrimaryKey(id);
-    }
 
     @Override
     public int updateByPrimaryKeySelective(User record) {
@@ -54,26 +38,19 @@ public class UserManagerImpl implements UserManager {
     }
 
     @Override
-    public int updateByPrimaryKeyWithBLOBs(User record) {
-        return userMapper.updateByPrimaryKeyWithBLOBs(record);
-    }
-
-    @Override
-    public int updateByPrimaryKey(User record) {
-        return userMapper.updateByPrimaryKey(record);
-    }
-
-
-    @Override
     public User login(HttpServletRequest request, HttpServletResponse response, String username, String passwd) {
-        User user=new User();
 
-        user.setUsername(username);
-        user.setPassword(MD5Util.md5(passwd));
+        Example example=new Example(User.class);
+        Example.Criteria criteria = example.createCriteria();
 
-        user = userMapper.selectByEntry(user);
+        if (username != null) {
+            criteria.andEqualTo("username", username);
+        }
+        if (passwd != null) {
+            criteria.andEqualTo("password", MD5Util.md5(passwd));
+        }
+        User user = (User) userMapper.selectByExample(example);
 
-        logout(request, response);
         if(user!=null){
             request.getSession().setAttribute("user",user);
         }
@@ -91,7 +68,7 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public User selectByEntry(User record) {
-        return userMapper.selectByEntry(record);
+        return userMapper.selectOne(record);
     }
 
     @Override
@@ -104,12 +81,8 @@ public class UserManagerImpl implements UserManager {
 
     @Override
     public List<User> listByDataTable(Map<String, Object> map) {
+        PageHelper.startPage((Integer) map.get("iDisplayStart"), (Integer) map.get("iDisplayLength"));
         return userMapper.listByPager(buildPagerMap(map));
-    }
-
-    @Override
-    public long getTotalByDataTable(Map<String, Object> map) {
-        return userMapper.getTotalByPager(buildPagerMap(map));
     }
 
     /**
@@ -119,13 +92,6 @@ public class UserManagerImpl implements UserManager {
      */
     private static Map buildPagerMap(Map map){
         Map<String,Object> map1=new HashMap<String,Object>();
-        if(map==null){
-            map.put("start",0);
-            map.put("limit",10);
-            return map1;
-        }
-        map1.put("start",map.get("iDisplayStart"));
-        map1.put("limit",map.get("iDisplayLength"));
         //注意字段用sql关键字的情况
         String orderByClause;
         Object iSortCol_0 = map.get("iSortCol_0");

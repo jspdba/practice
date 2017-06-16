@@ -25,7 +25,7 @@ public interface BaseService<T> {
 
     public T selectByPrimaryKey(long id);
 
-    int updateByPrimaryKeySelective(T channel);
+    int updateByPrimaryKeySelective(T entity);
 
     List<T> selectByExample(Object example);
 }

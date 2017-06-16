@@ -54,7 +54,7 @@
     <!--<table tableName="%" >
       <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
     </table>-->
-    <table tableName="channel" >
+    <table tableName="user" >
       <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
     </table>
   </context>

@@ -1,5 +1,6 @@
 package top.wuchaofei.controller;
 
+import com.github.pagehelper.PageInfo;
 import org.apache.commons.lang.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -110,10 +111,11 @@ public class UserController {
         DataTableParameter data =new DataTableParameter();
         Map<String,Object> map =convertToMap(param);
         List<User> list = userManager.listByDataTable(map);
-        long totalCount =userManager.getTotalByDataTable(map);
-        data.setAaData(list);
-        data.setiTotalDisplayRecords(totalCount);
-        data.setiTotalRecords(totalCount);
+        //强制转换为pageInfo
+        PageInfo<User> pageInfo = new PageInfo<User>(list);
+        data.setAaData(pageInfo.getList());
+        data.setiTotalDisplayRecords(pageInfo.getTotal());
+        data.setiTotalRecords(pageInfo.getTotal());
         data.setsEcho(map.get("sEcho")+"");
         return data;
     }
@@ -145,7 +147,7 @@ public class UserController {
                 user.setPassword(MD5Util.md5(user.getPassword()));
             }
             try {
-                userManager.insertSelective(user);
+                userManager.save(user);
             }catch (Exception e){
                 e.printStackTrace();
                 redirectAttributes.addFlashAttribute("msg",e.getMessage());
