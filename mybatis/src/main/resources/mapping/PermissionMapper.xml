@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="top.wuchaofei.mapper.PermissionMapper" >
+  <resultMap id="BaseResultMap" type="top.wuchaofei.domain.Permission" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="permissionname" property="permissionname" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="LONGVARCHAR" />
+  </resultMap>
+
+  <sql id="Base_Column_List" >
+    id, permissionname, description
+  </sql>
+
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from permission
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from permission
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="top.wuchaofei.domain.Permission" >
+    insert into permission (id, permissionname, description
+      )
+    values (#{id,jdbcType=INTEGER}, #{permissionname,jdbcType=VARCHAR}, #{description,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="top.wuchaofei.domain.Permission" >
+    insert into permission
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="permissionname != null" >
+        permissionname,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="permissionname != null" >
+        #{permissionname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+  <insert id="saveOrUpdate" parameterType="top.wuchaofei.domain.Permission">
+    <selectKey keyProperty="count" resultType="int" order="BEFORE">
+      select count(*) from permission where permissionname = #{permissionname}
+    </selectKey>
+    <if test="count > 0">
+      update permission
+      <set >
+        <if test="permissionname != null" >
+          permissionname = #{permissionname,jdbcType=VARCHAR},
+        </if>
+        <if test="description != null" >
+          description = #{description,jdbcType=LONGVARCHAR},
+        </if>
+      </set>
+      where permissionname = #{permissionname}
+    </if>
+    <if test="count==0">
+      insert into permission
+      <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="permissionname != null" >
+          permissionname,
+        </if>
+        <if test="description != null" >
+          description,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="permissionname != null" >
+          #{permissionname,jdbcType=VARCHAR},
+        </if>
+        <if test="description != null" >
+          #{description,jdbcType=LONGVARCHAR},
+        </if>
+      </trim>
+    </if>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="top.wuchaofei.domain.Permission" >
+    update permission
+    <set >
+      <if test="permissionname != null" >
+        permissionname = #{permissionname,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="top.wuchaofei.domain.Permission" >
+    update permission
+    set permissionname = #{permissionname,jdbcType=VARCHAR},
+      description = #{description,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+  <select id="selectByRoleId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+    SELECT  p.*
+    FROM permission p INNER JOIN role_permission rp on rp.permission = p.id
+    WHERE rp.role = #{id,jdbcType=INTEGER}
+  </select>
+
+  <select id="listByPager" parameterType="java.util.Map" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from permission
+    <if test="orderByClause != null">
+      ORDER BY ${orderByClause}
+    </if>
+    <if test="orderByClause == null">
+      ORDER BY id
+    </if>
+    limit #{start},#{limit}
+  </select>
+  <select id="getTotalByPager" resultType="java.lang.Long" parameterType="java.util.Map">
+    SELECT count(1) FROM permission
+  </select>
+
+  <!-- 选择权限给角色 ，checkbox 列表-->
+  <select id="selectPermissionByRoleId" resultType="top.wuchaofei.domain.PermissionVo">
+    select p.id, p.permissionname, ifnull(rp.role,0) marker, #{id,jdbcType=INTEGER} roleId from permission p
+    left join(select * from role_permission where role=#{id,jdbcType=INTEGER}) rp on p.id = rp.permission
+    order by p.id
+  </select>
+</mapper>

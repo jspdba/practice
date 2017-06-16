@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!-- 配置文件路径 -->
+    <!--<properties url="${mybatis.generator.generatorConfig.properties}"/>-->
+    <!--<properties url="generator.properties" />-->
+    <!--<properties resource="properties/generator.properties" />-->
+    <properties resource="generator.properties" />
+
+    <!--驼峰写法-->
+    <!--<property name="useActualColumnNames" value="true" />-->
+
+    <!--数据库驱动包路径 -->
+    <classPathEntry location="${drive.class.path}"/>
+
+    <context id="MySQLTables" targetRuntime="MyBatis3"  defaultModelType="flat">
+        <!--conditional
+        这是默认值
+        这个模型与hierarchical模型相似,除了如果一个实体类只包含一个字段,则不会单独生成此实体类。因此,如果一个表的主键只有一个字段,那么不会为该字段生成单独的实体类,会将该字段合并到基本实体类中。
+        flat
+        该模型为每一张表只生成一个实体类。这个实体类包含表中的所有字段。一般使用这个模型就够了。
+        hierarchical
+        如果表有主键,那么该模型会产生一个单独的主键实体类,如果表还有BLOB字段，则会为表生成一个包含所有BLOB字段的单独的实体类,然后为所有其他的字段生成一个单独的实体类。MBG会在所有生成的实体类之间维护一个继承关系。
+        显然这个模型比较复杂。-->
+        <!-- 生成的Java文件的编码 -->
+        <property name="javaFileEncoding" value="UTF-8"/>
+        <!-- 格式化java代码 -->
+        <property name="javaFormatter" value="org.mybatis.generator.api.dom.DefaultJavaFormatter"/>
+        <!-- 格式化XML代码 -->
+        <property name="xmlFormatter" value="org.mybatis.generator.api.dom.DefaultXmlFormatter"/>
+
+        <!-- 注释 -->
+        <commentGenerator >
+            <property name="suppressAllComments" value="true"/><!-- 是否取消注释 -->
+            <property name="suppressDate" value="true" /> <!-- 是否生成注释代时间戳-->
+        </commentGenerator>
+
+        <!--数据库连接信息 -->
+        <jdbcConnection driverClass="${jdbc.driver}" connectionURL="${jdbc.url}" userId="${jdbc.username}"
+                        password="${jdbc.password}">
+        </jdbcConnection>
+
+        <!--生成的model 包路径 -->
+        <javaModelGenerator targetPackage="${model.package}" targetProject="${target.domain.java}">
+            <property name="enableSubPackages" value="ture"/>
+            <property name="trimStrings" value="true"/>
+        </javaModelGenerator>
+
+        <!--生成xml mapper文件 路径 -->
+        <sqlMapGenerator targetPackage="${xml.mapper.package}" targetProject="${target.dao.resource}">
+            <property name="enableSubPackages" value="ture"/>
+        </sqlMapGenerator>
+
+        <!-- 生成的Dao接口 的包路径 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="${dao.package}" targetProject="${target.dao.java}">
+            <property name="enableSubPackages" value="ture"/>
+        </javaClientGenerator>
+
+        <table tableName="channel" enableCountByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false"
+               enableSelectByExample="false" selectByExampleQueryId="false">
+        </table>
+    </context>
+</generatorConfiguration>
