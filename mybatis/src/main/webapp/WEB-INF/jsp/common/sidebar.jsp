@@ -33,7 +33,14 @@
                     </ul>
                 </li>
             </shiro:hasAnyRoles>
-
+            <shiro:hasAnyRoles name="admin">
+                <li class="${4==active_ul?'active':''} treeview">
+                    <a href="#"><i class="fa fa-th"></i> <span>微信管理</span><span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span></a>
+                    <ul class="treeview-menu">
+                        <li ${(4==active_ul && 0==active_li)?'class="active"':''}><a href="/wechat/login.action"><i class="fa fa-circle-o text-aqua"></i> <span>个人微信登录</span></a></li>
+                    </ul>
+                </li>
+            </shiro:hasAnyRoles>
         </ul>
     </section>
 </aside>

@@ -23,7 +23,7 @@
     </bean>
 
     <import resource="classpath*:applicationContext-web.xml"/>
-    <import resource="classpath*:applicationContext-redis.xml"/>
+    <!--<import resource="classpath*:applicationContext-redis.xml"/>-->
     <import resource="classpath*:applicationContext-dao.xml"/>
     <import resource="classpath*:applicationContext-shiro.xml"/>
 </beans>

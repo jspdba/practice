@@ -10,6 +10,13 @@
     <packaging>war</packaging>
     <name>mybatis Maven Webapp</name>
     <url>http://maven.apache.org</url>
+    <dependencies>
+        <dependency>
+            <groupId>top.wuchaofei</groupId>
+            <artifactId>itchat4j</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
