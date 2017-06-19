@@ -21,3 +21,4 @@
 1. [Mybatis-PageHelper](https://github.com/pagehelper/Mybatis-PageHelper)
 2. [MyBatis通用Mapper3](https://github.com/abel533/Mapper)
 3. [使用Mapper专用的MyBatis Generator插件](http://git.oschina.net/free/Mapper/blob/master/wiki/mapper3/7.UseMBG.md)
+4. [github](https://github.com/yaphone/itchat4j/tree/96bf71c5be3624dfdcb51dd6f2fdec466ce9f552)

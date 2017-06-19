@@ -73,7 +73,7 @@ public class UserController {
                     }
                 }
             }
-            return "redirect:/tinker/list";
+            return "redirect:/";
         } catch (AuthenticationException e) {
             e.printStackTrace();
             logger.error(e.getMessage());
