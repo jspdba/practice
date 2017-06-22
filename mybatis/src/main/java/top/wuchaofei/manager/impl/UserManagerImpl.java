@@ -46,9 +46,6 @@ public class UserManagerImpl extends BaseServiceImpl<User> implements UserManage
         if (username != null) {
             criteria.andEqualTo("username", username);
         }
-        if (passwd != null) {
-            criteria.andEqualTo("password", MD5Util.md5(passwd));
-        }
         User user = (User) userMapper.selectByExample(example);
 
         if(user!=null){

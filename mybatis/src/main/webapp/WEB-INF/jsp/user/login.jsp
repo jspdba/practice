@@ -6,7 +6,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="/tinker/list.action"><b>管理平台</b>tinker</a>
+        <a href="/user/my.action"><b>管理平台</b>test</a>
     </div>
     <!-- /.login-logo -->
     <div class="login-box-body">
@@ -23,6 +23,15 @@
                 <span class="glyphicon glyphicon-lock form-control-feedback"></span>
             </div>
             <div class="row">
+                <div class="col-xs-6">
+                    <input type="text" name="kaptcha"  class="login_input_kaptcha form-control" id="kaptcha" autocomplete="off" placeholder="验证码"/>
+                </div>
+                <div class="col-xs-6">
+                    <img  class="login_input_kaptcha_img" alt="验证码" src="${contextPath}/static/kaptcha.jpg" title="点击更换" id="img_kaptcha" />
+                </div>
+            </div>
+
+            <div class="row">
                 <%--<div class="col-xs-8">
                     <div class="checkbox icheck">
                         <label>
@@ -30,26 +39,20 @@
                         </label>
                     </div>
                 </div>--%>
-                <!-- /.col -->
                 <div class="col-xs-12">
                     <button id="doLogin" type="button" class="btn btn-primary btn-block btn-flat">登录</button>
                 </div>
-                <!-- /.col -->
             </div>
         </form>
-
-        <%--<a href="register.html" class="text-center">Register a new membership</a>--%>
     </div>
-    <!-- /.login-box-body -->
 </div>
-<!-- /.login-box -->
-
-<!-- jQuery 2.2.3 -->
 <script src="/static/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <!-- Bootstrap 3.3.6 -->
 <script src="/static/bootstrap/js/bootstrap.min.js"></script>
 <!-- iCheck -->
 <script src="/static/plugins/iCheck/icheck.min.js"></script>
+
+<script src="/static/plugins/layer/layer.js"></script>
 <script>
     $(function () {
         $('input').iCheck({
@@ -62,20 +65,46 @@
     $("#doLogin").bind("click",function (data) {
         var parmas={
             username:$("#username").val(),
-            passwd:$("#passwd").val()
+            passwd:$("#passwd").val(),
+            kaptcha:$("#kaptcha").val()
         };
 
         if(!parmas.username){
-            alert("用户名不允许为空")
+            layer.msg('用户名不允许为空');
             return false;
         }
         if(!parmas.passwd){
-            alert("密码不允许为空")
+            layer.msg("密码不允许为空")
+            return false;
+        }
+
+        if(!parmas.kaptcha){
+            layer.msg("验证码不允许为空")
             return false;
         }
 
         $("#postForm")[0].submit();
     })
+
+
+    /*生成验证码*/
+    $(function(){  //生成验证码
+        $('#img_kaptcha').click(function () {
+            $(this).hide().attr('src', '/static/kaptcha.jpg?' + Math.floor(Math.random()*100) ).fadeIn(); });
+    });
+
+    window.onbeforeunload = function(){
+        //关闭窗口时自动退出
+        if(event.clientX>360&&event.clientY<0||event.altKey){
+            layer.msg(parent.document.location);
+        }
+    };
+
+    function changeCode() {  //刷新
+        $('#img_kaptcha').hide().attr('src', '/static/kaptcha.jpg?' + Math.floor(Math.random()*100) ).fadeIn();
+        event.cancelBubble=true;
+    }
+    /*生成验证码*/
 </script>
 </body>
 </html>

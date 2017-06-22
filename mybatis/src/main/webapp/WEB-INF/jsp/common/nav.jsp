@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <header class="main-header">
-    <a href="/tinker/list.action" class="logo">
+    <a href="/user/my.action" class="logo">
         <span class="logo-mini">tinker</span>
         <span class="logo-lg"><b>管理平台</b></span>
     </a>

@@ -1,26 +1,33 @@
 package top.wuchaofei.auth;
 
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.credential.CredentialsMatcher;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.wuchaofei.domain.Role;
 import top.wuchaofei.domain.User;
 import top.wuchaofei.manager.UserManager;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 
 /**
  * Created by cofco on 2017/6/5.
  */
-@Service
 public class MyShiro extends AuthorizingRealm {
     @Autowired
     UserManager userManager;
+
+    @Override
+    public void setCachingEnabled(boolean cachingEnabled) {
+        super.setCachingEnabled(false);
+    }
 
     /**
      * 权限认证
@@ -59,7 +66,8 @@ public class MyShiro extends AuthorizingRealm {
         User user=userManager.findUserByName(token.getUsername());
         if(user!=null){
             //若存在，将此用户存放到登录认证info中
-            return new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());
+//            return new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(), getName());
+            return new SimpleAuthenticationInfo(user.getUsername(), user.getPassword(),  ByteSource.Util.bytes(user.getUsername()), getName());
         }
         return null;
     }

@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import top.wuchaofei.auth.PasswordHelper;
 import top.wuchaofei.domain.DataTableParameter;
 import top.wuchaofei.domain.User;
 import top.wuchaofei.manager.UserManager;
@@ -41,7 +42,7 @@ public class UserController {
     UserManager userManager;
 
     @RequestMapping(value = "login",method = {RequestMethod.GET})
-    public String login_page(){
+    public String login_page(HttpServletRequest request){
         return "user/login";
     }
 
@@ -56,10 +57,22 @@ public class UserController {
             redirectAttributes.addFlashAttribute("message", "密码不能为空");
             return "redirect:/user/login";
         }
+
+        //先进行验证码检查
+        String exception = (String) request.getAttribute("shiroLoginFailure");
+
+        if(StringUtils.isNotBlank(exception)){
+            if("Kaptcha.error".equals(exception)){
+                redirectAttributes.addFlashAttribute("message", "验证码错误");
+            }
+            return "redirect:/user/login";
+        }
+
         try {
             //使用权限工具进行用户登录，登录成功后跳到shiro配置的successUrl中，与下面的return没什么关系！
-            SecurityUtils.getSubject().login(new UsernamePasswordToken(username, MD5Util.md5(passwd)));
+//            SecurityUtils.getSubject().login(new UsernamePasswordToken(username, MD5Util.md5(passwd)));
 
+            SecurityUtils.getSubject().login(new UsernamePasswordToken(username, passwd));
             User user = new User();
             user.setUsername(username);
             request.getSession().setAttribute("user",user);
@@ -144,7 +157,7 @@ public class UserController {
         if(user.getId()==null || user.getId()==0){
             if(StringUtils.isNotBlank(user.getPassword())){
                 //password加密
-                user.setPassword(MD5Util.md5(user.getPassword()));
+                user.setPassword(PasswordHelper.encryptPassword(user.getPassword(),user.getUsername()));
             }
             try {
                 userManager.save(user);

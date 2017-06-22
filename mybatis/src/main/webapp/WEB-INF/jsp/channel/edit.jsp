@@ -21,7 +21,7 @@
                 <small>渠道号</small>
             </h1>
             <%--<ol class="breadcrumb">
-                <li><a href="/tinker/list.action"><i class="fa fa-dashboard"></i>管理平台</a></li>
+                <li><a href="/user/my.action"><i class="fa fa-dashboard"></i>管理平台</a></li>
                 <li class="active">编辑</li>
             </ol>--%>
         </section>
