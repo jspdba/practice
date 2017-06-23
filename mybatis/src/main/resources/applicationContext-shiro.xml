@@ -29,15 +29,24 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
         <property name="realm" ref="myShiro"/>
         <!-- 使用下面配置的缓存管理器 -->
         <property name="cacheManager" ref="cacheManager"/>
+        <!-- remeberMe -->
+        <property name="rememberMeManager" ref="rememberMeManager"/>
     </bean>
 
+    <!--rememberMeCookie-->
+    <bean id="rememberMeCookie" class="org.apache.shiro.web.servlet.SimpleCookie">
+        <constructor-arg value="rememberMe"/>
+        <property name="httpOnly" value="true"/>
+        <property name="maxAge" value="2592000"/><!-- 30天 -->
+    </bean>
 
-    <!-- 凭证匹配器 -->
-    <!--<bean id="credentialsMatcher" class="top.wuchaofei.auth.MyHashedCredentialsMatcher">
-        <property name="hashAlgorithmName" value="md5"/>
-        <property name="hashIterations" value="2"/>
-        <property name="storedCredentialsHexEncoded" value="true"/>
-    </bean>-->
+    <!-- rememberMe管理器 -->
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <!-- rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度（128 256 512 位）-->
+        <property name="cipherKey"
+                  value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}"/>
+        <property name="cookie" ref="rememberMeCookie"/>
+    </bean>
 
     <!-- 配置shiro的过滤器工厂类，id- shiroFilter要和我们在web.xml中配置的过滤器一致 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
@@ -80,7 +89,7 @@ http://www.springframework.org/schema/context http://www.springframework.org/sch
                 /domainCheck/**=authc,anyRoles[admin,domain:admin]
                 /auth/**=authc,anyRoles[admin,auth:admin]-->
                 <!--所有的请求(除去配置的静态资源请求或请求地址为anon的请求)都要通过登录验证,如果未登录则跳到/login-->
-                /** = authc
+                /** = user
             </value>
         </property>
     </bean>

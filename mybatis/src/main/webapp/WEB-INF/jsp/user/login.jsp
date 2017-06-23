@@ -32,13 +32,13 @@
             </div>
 
             <div class="row">
-                <%--<div class="col-xs-8">
+                <div class="col-xs-8">
                     <div class="checkbox icheck">
                         <label>
-                            <input type="checkbox" checked> Remember Me
+                            <input type="checkbox" checked name="remberMe"> Remember Me
                         </label>
                     </div>
-                </div>--%>
+                </div>
                 <div class="col-xs-12">
                     <button id="doLogin" type="button" class="btn btn-primary btn-block btn-flat">登录</button>
                 </div>

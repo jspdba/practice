@@ -47,7 +47,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "login",method = {RequestMethod.POST})
-    public String login(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes, String username, String passwd){
+    public String login(HttpServletRequest request, RedirectAttributes redirectAttributes, String username, String passwd,boolean remberMe){
 
         if(StringUtils.isBlank(username)){
             redirectAttributes.addFlashAttribute("message", "用户名不能为空");
@@ -71,8 +71,12 @@ public class UserController {
         try {
             //使用权限工具进行用户登录，登录成功后跳到shiro配置的successUrl中，与下面的return没什么关系！
 //            SecurityUtils.getSubject().login(new UsernamePasswordToken(username, MD5Util.md5(passwd)));
-
-            SecurityUtils.getSubject().login(new UsernamePasswordToken(username, passwd));
+//            rememeberMe
+            UsernamePasswordToken token = new UsernamePasswordToken(username, passwd);
+            if(remberMe){
+                token.setRememberMe(true);
+            }
+            SecurityUtils.getSubject().login(token);
             User user = new User();
             user.setUsername(username);
             request.getSession().setAttribute("user",user);

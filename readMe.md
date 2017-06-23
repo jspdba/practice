@@ -27,6 +27,30 @@
             jspdba/839d39be7c7f99c9cd6cf2af4f23056f
         明文
             jspdba/(wuchaofei,jspdba)
+##生成证书
+    keytool -genkey -alias casserver -keypass wuchaofei -keyalg RSA  -keystore casserver.keystore  -validity 365
+    说明：-alias指定别名为casserver；-keyalg指定RSA算法；-keypass指定私钥密码；-keystore指定密钥文件名称为casserver.keystore；-validity指定有效期为365天。另外提示的输入keystore密码应与-keypass指定的相同；您的名字与姓氏是CAS服务器使用的域名（不能是IP，也不能是localhost），其它项随意填。
+    keytool -export -alias casserver -storepass wuchaofei -file casserver.cer -keystore casserver.keystore
+    keytool -import -trustcacerts -alias casserver -storepass wuchaofei  -file casserver.cer -keystore cacerts
+    
+    客户端导入证书
+    keytool -import -trustcacerts -alias casserver -storepass wuchaofei  -file casserver.cer -keystore cacerts 
+    
+    生成客户端密钥库文件 
+    单向认证的客户端配置只需生成客户端信任文件caserts即可。首先将服务端生成的证书文件（之前生成的casserver.cer文件）复制到$JAVA_HOME/jre/lib/security下，然后打开CMD窗口切换到$JAVA_HOME/jre/lib/security下并执行命令： 
+    keytool -import -trustcacerts -alias casclient -storepass changeit -file casserver.cer -keystore cacerts    
+    tomcat 配置
+    <Connector SSLEnabled="true" clientAuth="false"     
+        keystoreFile="D:/Java/apache/apache-tomcat-cas/casserver.keystore"     
+        keystorePass="demosso"     
+        maxThreads="150"     
+        port="443"     
+        protocol="org.apache.coyote.http11.Http11Protocol"     
+        scheme="https" secure="true" sslProtocol="TLS"/>    
+    <!--keystoreFile 生成的安全证书的位置 -->    
+    <!--keystorePass设置安全证书的密码--> 
+    
+    
 #参考
 1. [Mybatis-PageHelper](https://github.com/pagehelper/Mybatis-PageHelper)
 2. [MyBatis通用Mapper3](https://github.com/abel533/Mapper)
