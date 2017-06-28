@@ -16,7 +16,7 @@
             <list>
                 <value>classpath:properties/application.properties</value>
                 <value>classpath:properties/redis.properties</value>
-                <!--<value>classpath:properties/db.properties</value>-->
+                <value>classpath:properties/db.properties</value>
             </list>
         </property>
         <property name="fileEncoding" value="UTF-8" />
@@ -24,4 +24,5 @@
 
     <import resource="classpath*:applicationContext-web.xml"/>
     <import resource="classpath*:applicationContext-redis.xml"/>
+    <import resource="classpath*:applicationContext-dao.xml"/>
 </beans>
