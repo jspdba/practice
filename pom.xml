@@ -47,6 +47,7 @@
         <module>mybatis</module>
         <module>itchat4j</module>
         <module>cas_server</module>
+        <module>cas_client</module>
     </modules>
 
     <dependencies>
