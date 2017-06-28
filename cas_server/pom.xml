@@ -12,8 +12,17 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!--  MyBatis Generator  -->
+        <!--  Java接口和实体类  -->
+        <targetJavaProject>${basedir}/src/main/java</targetJavaProject>
+        <targetMapperPackage>sso.top.wuchaofei.mapper</targetMapperPackage>
+        <targetModelPackage>sso.top.wuchaofei.domain</targetModelPackage>
+        <!--  XML生成路径  -->
+        <targetResourcesProject>${basedir}/src/main/resources</targetResourcesProject>
+        <targetXMLPackage>mapper</targetXMLPackage>
         <!--  编译jdk版本  -->
         <jdk.version>1.6</jdk.version>
+
         <deploy.type>dev</deploy.type>
     </properties>
 
@@ -50,10 +59,10 @@
                     <connectors>
                         <connector implementation="org.mortbay.jetty.security.SslSocketConnector">
                             <port>8443</port>
-                            <keystore>D:/zhongliang/practice/casserver.keystore</keystore>
+                            <keystore>${basedir}/casserver.keystore</keystore>
                             <password>wuchaofei</password>
                             <keyPassword>wuchaofei</keyPassword>
-                            <truststore>D:/zhongliang/practice/casserver.keystore</truststore>
+                            <truststore>${basedir}/casserver.keystore</truststore>
                             <trustPassword>wuchaofei</trustPassword>
                             <wantClientAuth>true</wantClientAuth>
                             <needClientAuth>false</needClientAuth>
@@ -62,7 +71,7 @@
                     <systemProperties>
                         <systemProperty>
                             <name>javax.net.ssl.trustStore</name>
-                            <value>D:/zhongliang/practice/casserver.keystore</value>
+                            <value>${basedir}/casserver.keystore</value>
                         </systemProperty>
                         <systemProperty>
                             <name>javax.net.ssl.trustStorePassword</name>
@@ -70,7 +79,28 @@
                         </systemProperty>
                     </systemProperties>
                 </configuration>
-
+            </plugin>
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>${mybatis.generator.version}</version>
+                <configuration>
+                    <configurationFile>${basedir}/src/main/resources/generator/generatorConfig.xml</configurationFile>
+                    <overwrite>true</overwrite>
+                    <verbose>true</verbose>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>mysql</groupId>
+                        <artifactId>mysql-connector-java</artifactId>
+                        <version>${mysql.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>tk.mybatis</groupId>
+                        <artifactId>mapper</artifactId>
+                        <version>${mapper.version}</version>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
 
