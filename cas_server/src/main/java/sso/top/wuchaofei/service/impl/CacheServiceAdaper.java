@@ -17,9 +17,14 @@ public class CacheServiceAdaper implements CacheService {
     @Autowired
     RedisTemplate redisTemplate;
 
+    /**
+     * 默认有效时间为5分钟
+     * @param key
+     * @param value
+     */
     @Override
     public void setEx(String key, String value) {
-        set(key, value, 1000*60*24*30);
+        set(key, value, 1000*60*5);
     }
 
     @Override

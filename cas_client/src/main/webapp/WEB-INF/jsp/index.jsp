@@ -5,5 +5,12 @@
 </head>
 <body>
 app 首页
+<ul>
+    <li>
+        <a href="/user/my">访问受限资源</a>
+    </li>
+
+</ul>
+
 </body>
 </html>
